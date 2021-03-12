@@ -17,6 +17,7 @@ USER ${user}
 
 WORKDIR /home/${user}
 
-COPY vimrc .vimrc
+COPY vimrc.vundle.omnisharp .vimrc
+RUN vim +PluginInstall +q! +q!
 
 ENTRYPOINT ["/usr/bin/pwsh"]
