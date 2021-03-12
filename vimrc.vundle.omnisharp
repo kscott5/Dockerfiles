@@ -13,7 +13,7 @@ let s:using_snippets = 1
 set shell=/bin/bash
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=$HOME/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
@@ -55,7 +55,7 @@ endif
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-" start Settings: config
+" start Settings: config()
 filetype indent plugin on
 if !exists('g:syntax_on') | syntax enable | endif
 set encoding=utf-8
@@ -90,9 +90,9 @@ set signcolumn=yes
 
 set mouse=a
 set updatetime=1000
-" end Settings: config
+" end Settings: config()
 
-" start Colors: config
+" start Colors: config()
 augroup ColorschemePreferences
   autocmd!
   " These preferences clear some gruvbox background colours, allowing transparency
@@ -112,9 +112,9 @@ endif
 
 set background=dark
 colorscheme gruvbox
-" end Colors: config
+" end Colors: config()
 
-" start ALE: config
+" start ALE: config()
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:ale_sign_info = '·'
@@ -122,9 +122,9 @@ let g:ale_sign_style_error = '·'
 let g:ale_sign_style_warning = '·'
 
 let g:ale_linters = { 'cs': ['OmniSharp'] }
-" end ALE: config
+" end ALE: config()
 
-" start Asyncomplete: config
+" start Asyncomplete: config()
 let g:asyncomplete_auto_popup = 1
 
 function! s:check_back_space() abort
@@ -142,9 +142,9 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " be overridden all the time
 let g:asyncomplete_auto_completeopt = 0
 set completeopt=menuone,noinsert,noselect,preview 
-" end Asyncomplete: config
+" end Asyncomplete: config()
 
-" start Sharpenup: config
+" start Sharpenup: config()
 " All sharpenup mappings will begin with `<Space>os`, e.g. `<Space>osgd` for
 " :OmniSharpGotoDefinition
 let g:sharpenup_map_prefix = '<Space>os'
@@ -156,9 +156,9 @@ augroup OmniSharpIntegrations
   autocmd!
   autocmd User OmniSharpProjectUpdated,OmniSharpReady call lightline#update()
 augroup END
-" end Sharpenup: config
+" end Sharpenup: config()
 
-" start Lightline: config
+" start Lightline: config()
 let g:lightline = {
 \ 'colorscheme': 'gruvbox',
 \ 'active': {
@@ -195,9 +195,11 @@ let g:lightline#ale#indicator_infos = "\uf129 "
 let g:lightline#ale#indicator_warnings = "\uf071 "
 let g:lightline#ale#indicator_errors = "\uf05e "
 let g:lightline#ale#indicator_ok = "\uf00c "
-" end Lightline: config
+" end Lightline: config()
 
-" start OmniSharp: config
+" start OmniSharp: config()
+let g:OmniSharp_start_server = 0
+let g:OmniSharp_server_stdio = 0
 let g:OmniSharp_popup_position = 'peek'
 if has('nvim')
   let g:OmniSharp_popup_options = {
@@ -224,7 +226,7 @@ endif
 let g:OmniSharp_highlight_groups = {
 \ 'ExcludedCode': 'NonText'
 \}
-" end OmniSharp: config
+" end OmniSharp: config()
 
 "
 " Brief help
