@@ -1,0 +1,20 @@
+FROM node 
+
+RUN apt-get update
+RUN apt-get install vim-nox -y
+
+ARG user=developer
+ARG userid=1001
+
+ARG group=developers
+ARG gid=1001
+
+RUN groupadd --gid ${gid} ${group}
+
+RUN adduser --home /home/${user} --uid ${userid} --gid ${gid} --disabled-password --gecos "" --shell /bin/sh ${user}
+
+USER ${user}
+
+WORKDIR /home/${user}
+
+ENTRYPOINT ["/bin/bash"]
