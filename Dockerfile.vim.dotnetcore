@@ -15,6 +15,9 @@ RUN adduser --home /home/${user} --uid ${userid} --gid ${gid} --disabled-passwor
 
 USER ${user}
 
+EXPOSE 2000/tcp
+EXPOSE 2000/udp
+
 WORKDIR /home/${user}
 
 COPY vimrc.vundle.omnisharp .vimrc
