@@ -25,10 +25,7 @@ Plugin 'VundleVim/Vundle.vim'
 " omnisharp c# https://github.com/OmniSharp/omnisharp-vim
 Plugin 'omnisharp/omnisharp-vim'
 
-" Mappings, code-actions available flag and statusline integration
-Plugin 'nickspoons/vim-sharpenup'
-
-" Linting/error highlighting
+" Linting/error highlighting ('w0rp/ale' same @ vimawesome.com)
 Plugin 'dense-analysis/ale'
 
 " Vim FZF integration, used as OmniSharp selector
@@ -39,7 +36,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'prabirshrestha/asyncomplete.vim'
 
 " Colorscheme
-Plugin 'gruvbox-community/gruvbox'
+Plugin 'morhetz/gruvbox'
 
 " Statusline
 Plugin 'itchyny/lightline.vim'
@@ -121,6 +118,7 @@ let g:ale_sign_info = '·'
 let g:ale_sign_style_error = '·'
 let g:ale_sign_style_warning = '·'
 
+" linters LSP support map
 let g:ale_linters = { 'cs': ['OmniSharp'] }
 " end ALE: config()
 
@@ -144,20 +142,6 @@ let g:asyncomplete_auto_completeopt = 0
 set completeopt=menuone,noinsert,noselect,preview 
 " end Asyncomplete: config()
 
-" start Sharpenup: config()
-" All sharpenup mappings will begin with `<Space>os`, e.g. `<Space>osgd` for
-" :OmniSharpGotoDefinition
-let g:sharpenup_map_prefix = '<Space>os'
-
-let g:sharpenup_statusline_opts = { 'Text': '%s (%p/%P)' }
-let g:sharpenup_statusline_opts.Highlight = 0
-
-augroup OmniSharpIntegrations
-  autocmd!
-  autocmd User OmniSharpProjectUpdated,OmniSharpReady call lightline#update()
-augroup END
-" end Sharpenup: config()
-
 " start Lightline: config()
 let g:lightline = {
 \ 'colorscheme': 'gruvbox',
@@ -165,14 +149,11 @@ let g:lightline = {
 \   'right': [
 \     ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok'],
 \     ['lineinfo'], ['percent'],
-\     ['fileformat', 'fileencoding', 'filetype', 'sharpenup']
+\     ['fileformat', 'fileencoding', 'filetype']
 \   ]
 \ },
 \ 'inactive': {
-\   'right': [['lineinfo'], ['percent'], ['sharpenup']]
-\ },
-\ 'component': {
-\   'sharpenup': sharpenup#statusline#Build()
+\   'right': [['lineinfo'], ['percent']]
 \ },
 \ 'component_expand': {
 \   'linter_checking': 'lightline#ale#checking',
@@ -198,8 +179,8 @@ let g:lightline#ale#indicator_ok = "\uf00c "
 " end Lightline: config()
 
 " start OmniSharp: config()
-let g:OmniSharp_start_server = 0
-let g:OmniSharp_server_stdio = 0
+let g:OmniSharp_start_server = 1 " http=0 not asynchronized
+let g:OmniSharp_server_stdio = 1 " http=0
 let g:OmniShar_timeout = 5 " http sychronized sleep (seconds)
 let g:OmniSharp_popup_position = 'peek'
 if has('nvim')
