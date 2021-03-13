@@ -31,5 +31,14 @@ WORKDIR /home/${user}
 COPY vimrc.vundle.omnisharp .vimrc
 
 RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
+RUN git clone https://github.com/OmniSharp/csharp-language-server-protocol.git --quiet
+
+RUN wget --quiet https://dot.net/v1/dotnet-install.sh
+RUN wget --quiet https://dot.net/v1/dotnet-install.ps1
+
+RUN chmod 755 ./dotnet-install.sh
+RUN chmod 755 ./dotnet-install.ps1
+
+RUN bash -c  ./dotnet-install.sh
 
 ENTRYPOINT ["/usr/bin/pwsh"]
