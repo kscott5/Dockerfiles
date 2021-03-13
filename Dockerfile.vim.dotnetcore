@@ -9,6 +9,7 @@ RUN curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/
 
 RUN apt-get update
 RUN apt-get install fish -y
+RUN apt-get install fzf
 
 ARG user=developer
 ARG userid=1001
