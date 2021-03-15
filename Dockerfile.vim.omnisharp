@@ -1,8 +1,20 @@
-FROM mcr.microsoft.com/dotnet/sdk:latest 
+FROM debian:latest 
+
+ARG user=dcoder
+
+ARG group=developers
+ARG gid=1001
+
+RUN groupadd --gid ${gid} ${group}
+
+RUN adduser --home /home/${user} --uid ${userid} --gid ${gid} --disabled-password --gecos "" --shell /bin/bash ${user}
 
 RUN apt-get update
 RUN apt-get install vim-nox -y
+RUN apt-get install curl -y
+RUN apt-get install wget -y
 RUN apt-get install gnupg -y
+RUN apt-get install git -y
 
 RUN echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_10/ /' | tee /etc/apt/sources.list.d/shells:fish:release:3.list
 RUN curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_10/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg > /dev/null
@@ -11,34 +23,26 @@ RUN apt-get update
 RUN apt-get install fish -y
 RUN apt-get install fzf -y
 
-ARG user=developer
-ARG userid=1001
+# https://docs.microsoft.com/en-us/dotnet/core/install/linux-debian
+RUN wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN rm packages-microsoft-prod.deb
 
-ARG group=developers
-ARG gid=1001
+RUN apt-get update
+RUN apt-get install apt-transport-https -y
 
-RUN groupadd --gid ${gid} ${group}
-
-RUN adduser --home /home/${user} --uid ${userid} --gid ${gid} --disabled-password --gecos "" --shell /usr/bin/pwsh ${user}
-
-USER ${user}
-
-EXPOSE 2000/tcp
-EXPOSE 2000/udp
+# .NET SDKs and Runtimes 
+RUN apt-get update
+RUN apt-get install dotnet-sdk-5.0/buster -y
+RUN apt-get install dotnet-sdk-3.1/buster -y
 
 WORKDIR /home/${user}
 
 COPY vimrc.vundle.omnisharp .vimrc
 
+# Vi IMproved Plugin loader
 RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
-RUN git clone https://github.com/OmniSharp/csharp-language-server-protocol.git --quiet
 
-RUN wget --quiet https://dot.net/v1/dotnet-install.sh
-RUN wget --quiet https://dot.net/v1/dotnet-install.ps1
+USER ${user}
 
-RUN chmod 755 ./dotnet-install.sh
-RUN chmod 755 ./dotnet-install.ps1
-
-RUN bash -c  ./dotnet-install.sh
-
-ENTRYPOINT ["/usr/bin/pwsh"]
+ENTRYPOINT ["/bin/bash"]
