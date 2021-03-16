@@ -1,5 +1,6 @@
 FROM ubuntu:latest 
 
+ARG hostname=ubudevice-001
 ARG user=dcoder
 ARG group=developers
 ARG groupId=1024
@@ -17,10 +18,12 @@ RUN apt-get install wget -y
 RUN apt-get install gnupg -y
 RUN apt-get install git -y
 
+EXPOSE 22/tcp
+EXPOSE 22/udp
+
 RUN apt-get install openssh-server -y
 RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
 RUN chmod a-w /etc/ssh/sshd_config.original
-RUN sshd -t -f /etc/ssh/sshd_config
 
 RUN apt-get update -y
 RUN apt-get install fish -y
