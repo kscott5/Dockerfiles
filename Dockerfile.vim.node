@@ -6,6 +6,9 @@ ARG userid=1001
 ARG group=kscott
 ARG gid=1001
 
+# https://bit.ly/3eDqwxf
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update -y
 RUN apt-get install apt-transport-https -y
 RUN apt-get install curl wget -y
