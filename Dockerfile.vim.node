@@ -1,20 +1,43 @@
 FROM node 
 
-RUN apt-get update
-RUN apt-get install vim-nox -y
-
-ARG user=developer
+ARG user=kscott
 ARG userid=1001
 
-ARG group=developers
+ARG group=kscott
 ARG gid=1001
 
-RUN groupadd --gid ${gid} ${group}
+RUN apt-get update -y
+RUN apt-get install apt-transport-https -y
+RUN apt-get install curl wget -y
 
-RUN adduser --home /home/${user} --uid ${userid} --gid ${gid} --disabled-password --gecos "" --shell /bin/sh ${user}
+RUN apt-get update -y
+RUN apt-get install vim-nox -y
+
+RUN apt-get update -y
+RUN apt-get install openssh-server -y
+
+RUN cp /etc/ssh/ssh_config /etc/ssh/ssh_config.original
+RUN chmod 555 /etc/ssh/ssh_config.original
+
+RUN apt-get update -y
+RUN apt-get install fish fzf git -y
+
+RUN groupadd --gid ${gid} ${group}
+RUN adduser --home /home/${user} --uid ${userid} --gid ${gid} --disabled-password --gecos "" --shell /bin/bash ${user}
+RUN chmod ${user}:${group} /home/${user}
 
 USER ${user}
 
 WORKDIR /home/${user}
+
+COPY vimrc.vundle.node .vimrc
+RUN chown ${user}:${group} .vimrc
+
+# Vi IMproved Plugin loader
+RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
+RUN chown --recursive
+
+RUN curl -fsSL https://deb.nodesource.com/setup_15.x  | bash -
+RUN apt-get install nodejs -y
 
 ENTRYPOINT ["/bin/bash"]
