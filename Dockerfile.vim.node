@@ -1,4 +1,4 @@
-FROM node 
+FROM ubuntu:latest 
 
 ARG user=kscott
 ARG userid=1001
