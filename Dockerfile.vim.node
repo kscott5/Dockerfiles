@@ -52,4 +52,5 @@ COPY vimrc.vundle.node .vimrc
 RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
 RUN chown --recursive ${user}:${group}  /home/${user}
 
+
 ENTRYPOINT ["/bin/bash"]
