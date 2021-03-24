@@ -19,8 +19,11 @@ RUN apt-get install vim-nox -y
 RUN apt-get update -y
 RUN apt-get install openssh-server -y
 
-RUN cp /etc/ssh/ssh_config /etc/ssh/ssh_config.original
-RUN chmod 555 /etc/ssh/ssh_config.original
+COPY ssh_config /etc/ssh/ssh_config
+RUN chmod 644 /etc/ssh/ssh_config
+
+COPY sshd_config /etc/ssh/sshd_config
+RUN chmod 644 /etc/ssh/sshd_config
 
 RUN apt-get update -y
 RUN apt-get install fish fzf git -y
@@ -36,6 +39,10 @@ USER ${user}
 
 WORKDIR /home/${user}
 
+# https://help.ubuntu.com/community/SSH/OpenSSH/Keys
+# https://man.openbsd.org/sshd.8
+COPY ~/.ssh/authorized_keys .ssh/authorized_keys
+
 COPY vimrc.vundle.node .vimrc
 
 # Vi IMproved Plugin loader
@@ -43,3 +50,4 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim
 RUN chown --recursive ${user}:${group}  .vim
 
 ENTRYPOINT ["/bin/bash"]
+
