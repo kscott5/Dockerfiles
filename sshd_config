@@ -39,7 +39,13 @@ Include /etc/ssh/sshd_config.d/*.conf
 #PubkeyAuthentication yes
 
 # Expect .ssh/authorized_keys2 to be disregarded by default in future.
-AuthorizedKeysFile	~/.ssh/authorized_keys ~/.ssh/authorized_keys2
+# AuthorizedKeysFile	~/.ssh/authorized_keys ~/.ssh/authorized_keys2
+#
+# The above statement did not work.
+# https://help.ubuntu.com/community/SSH/OpenSSH/Keys
+#
+# Troubleshooting
+AuthorizedKeysFile  /etc/ssh/%u/authorized_keys
 
 #AuthorizedPrincipalsFile none
 
