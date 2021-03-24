@@ -27,7 +27,7 @@ RUN chmod 664 /etc/ssh/sshd_config
 RUN apt-get update -y
 RUN apt-get install fish fzf git -y
 
-RUN adduser --home /home/${user} --uid ${userid} --group ${group}} --disabled-password --gecos "" --shell /bin/bash ${user}
+RUN adduser --home /home/${user} --uid ${userid} --ingroup ${group} --disabled-password --gecos "" --shell /bin/bash ${user}
 RUN chown ${user}:${group} /home/${user}
 
 RUN curl -fsSL https://deb.nodesource.com/setup_15.x  | bash -
