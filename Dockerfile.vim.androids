@@ -43,8 +43,8 @@ RUN chown ${user}:${group} /home/${user}
 RUN mkdir /dev/kvm
 RUN mknod /dev/kvm c 0 0
 
-RUN adduser root libvirtd
-RUN adduser ${user} libvirtd
+RUN adduser root libvirt
+RUN adduser ${user} libvirt
 RUN chown root:libvirtd /dev/kvm
 
 WORKDIR /home/${user}
