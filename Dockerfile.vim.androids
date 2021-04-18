@@ -37,7 +37,7 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim
 
 RUN groupadd ${group}
 
-RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --disabled-password --gecos "" --shell /bin/bash ${user}
+RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm --disabled-password --gecos "" --shell /bin/bash ${user}
 RUN chown ${user}:${group} /home/${user}
 
 RUN mknod /dev/kvm c 0 0
@@ -60,9 +60,5 @@ COPY authorized_keys /etc/ssh/${user}
 RUN chmod 644 /etc/ssh/${user}/authorized_keys
 RUN chown ${user}:${group} /etc/ssh/${user}/authorized_keys
 RUN ssh-keygen -A
-
-RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm --disabled-password --gecos "" --shell /bin/bash ${user}
-RUN chown ${user}:${group} /home/${user}
-
 
 ENTRYPOINT ["/bin/bash"]
