@@ -41,11 +41,11 @@ RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm
 RUN chown ${user}:${group} /home/${user}
 
 RUN mkdir /dev/kvm
+RUN chown root:libvirt /dev/kvm
 RUN mknod /dev/kvm c 0 0
 
 RUN adduser root libvirt
 RUN adduser ${user} libvirt
-RUN chown root:libvirt /dev/kvm
 
 WORKDIR /home/${user}
 RUN chown --recursive ${user}:${group}  /home/${user}
