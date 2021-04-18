@@ -40,9 +40,8 @@ RUN groupadd ${group}
 RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm --disabled-password --gecos "" --shell /bin/bash ${user}
 RUN chown ${user}:${group} /home/${user}
 
-RUN echo > /dev/kvm
-RUN chown root:libvirt /dev/kvm
 RUN mknod /dev/kvm c 0 0
+RUN chown root:libvirt /dev/kvm
 
 RUN adduser root libvirt
 RUN adduser ${user} libvirt
