@@ -35,8 +35,6 @@ COPY vimrc.vundle.java .vimrc
 # Vi IMproved Plugin loader
 RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
 
-# https://help.ubuntu.com/community/KVM/Installation
-RUN groupadd kvm
 RUN groupadd ${group}
 
 RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm --disabled-password --gecos "" --shell /bin/bash ${user}
