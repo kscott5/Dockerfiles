@@ -28,26 +28,21 @@ RUN apt-get install exuberant-ctags git gradle -y
 # https://help.ubuntu.com/community/KVM/Installation
 RUN apt-get install qemu-system-x86 libvirt-daemon-system libvirt-clients bridge-utils cpu-checker -y
 
-WORKDIR /root
-
-COPY vimrc.vundle.java .vimrc
-
-# Vi IMproved Plugin loader
-RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
-
 RUN groupadd ${group}
 
 RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm --disabled-password --gecos "" --shell /bin/bash ${user}
 RUN chown ${user}:${group} /home/${user}
-
-RUN mknod /dev/kvm c 0 0
-#RUN chown root:libvirt /dev/kvm
 
 RUN adduser root libvirt
 RUN adduser ${user} libvirt
 
 WORKDIR /home/${user}
 RUN chown --recursive ${user}:${group}  /home/${user}
+
+COPY vimrc.vundle.java .vimrc
+
+# Vi IMproved Plugin loader
+RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
 
 RUN mkdir /etc/ssh/${user}
 RUN chmod 755 /etc/ssh/${user}
@@ -60,5 +55,8 @@ COPY authorized_keys /etc/ssh/${user}
 RUN chmod 644 /etc/ssh/${user}/authorized_keys
 RUN chown ${user}:${group} /etc/ssh/${user}/authorized_keys
 RUN ssh-keygen -A
+
+RUN service libvirtd start
+RUN service virtlogd start
 
 ENTRYPOINT ["/bin/bash"]
