@@ -25,13 +25,32 @@ RUN chmod 644 /etc/ssh/sshd_config
 RUN apt-get update -y
 RUN apt-get install universal-ctags git gradle -y
 
-RUN groupadd ${group}
-RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --disabled-password --gecos "" --shell /bin/bash ${user}
-RUN chown ${user}:${group} /home/${user}
-
+# https://help.ubuntu.com/community/KVM/Installation
 RUN apt-get install qemu-kvm qemu-system-x86_64 libvirt-daemon-system libvirt-clients bridge-utils -y
 
+WORKDIR /root
+
+COPY vimrc.vundle.java .vimrc
+
+# Vi IMproved Plugin loader
+RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
+
+# https://help.ubuntu.com/community/KVM/Installation
+RUN groupadd kvm
+RUN groupadd ${group}
+
+RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --ingroup kvm --disabled-password --gecos "" --shell /bin/bash ${user}
+RUN chown ${user}:${group} /home/${user}
+
+RUN mkdir /dev/kvm
+RUN mknod /dev/kvm c 0 0
+
+RUN adduser root libvirtd
+RUN adduser ${user} libvirtd
+RUN chown root:libvirtd /dev/kvm
+
 WORKDIR /home/${user}
+RUN chown --recursive ${user}:${group}  /home/${user}
 
 RUN mkdir /etc/ssh/${user}
 RUN chmod 755 /etc/ssh/${user}
@@ -45,11 +64,9 @@ RUN chmod 644 /etc/ssh/${user}/authorized_keys
 RUN chown ${user}:${group} /etc/ssh/${user}/authorized_keys
 RUN ssh-keygen -A
 
-COPY vimrc.vundle.java .vimrc
-
-# Vi IMproved Plugin loader
-RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
-RUN chown --recursive ${user}:${group}  /home/${user}
+RUN groupadd ${group}
+RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --disabled-password --gecos "" --shell /bin/bash ${user}
+RUN chown ${user}:${group} /home/${user}
 
 
 ENTRYPOINT ["/bin/bash"]
