@@ -1,0 +1,55 @@
+FROM androidsdk/android-29:latest 
+
+ARG user=kscott
+ARG group=developers
+
+# https://bit.ly/3eDqwxf
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update -y
+RUN apt-get install apt-transport-https -y
+RUN apt-get install curl wget -y
+
+RUN apt-get update -y
+RUN apt-get install vim-nox -y
+
+RUN apt-get update -y
+RUN apt-get install openssh-server -y
+
+COPY ssh_config /etc/ssh/ssh_config
+RUN chmod 644 /etc/ssh/ssh_config
+
+COPY sshd_config /etc/ssh/sshd_config
+RUN chmod 644 /etc/ssh/sshd_config
+
+RUN apt-get update -y
+RUN apt-get install git -y
+
+RUN groupadd ${group}
+RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --disabled-password --gecos "" --shell /bin/bash ${user}
+RUN chown ${user}:${group} /home/${user}
+
+RUN apt-get install qemu-kvm qemu-system-x86_64 libvirt-daemon-system libvirt-clients bridge-utils -y
+
+WORKDIR /home/${user}
+
+RUN mkdir /etc/ssh/${user}
+RUN chmod 755 /etc/ssh/${user}
+RUN chown ${user}:${group} /etc/ssh/${user}
+
+# https://help.ubuntu.com/community/SSH/OpenSSH/Keys
+# https://man.openbsd.org/sshd.8
+COPY authorized_keys /etc/ssh/${user}
+
+RUN chmod 644 /etc/ssh/${user}/authorized_keys
+RUN chown ${user}:${group} /etc/ssh/${user}/authorized_keys
+RUN ssh-keygen -A
+
+COPY vimrc.vundle.java .vimrc
+
+# Vi IMproved Plugin loader
+RUN git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim --quiet
+RUN chown --recursive ${user}:${group}  /home/${user}
+
+
+ENTRYPOINT ["/bin/bash"]
