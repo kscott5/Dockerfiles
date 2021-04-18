@@ -23,7 +23,7 @@ COPY sshd_config /etc/ssh/sshd_config
 RUN chmod 644 /etc/ssh/sshd_config
 
 RUN apt-get update -y
-RUN apt-get install universal-ctags git -y
+RUN apt-get install universal-ctags git gradle -y
 
 RUN groupadd ${group}
 RUN adduser --home /home/${user} --ingroup ${group} --ingroup root --disabled-password --gecos "" --shell /bin/bash ${user}
