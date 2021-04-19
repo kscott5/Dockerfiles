@@ -19,7 +19,7 @@ COPY sshd_config /etc/ssh/sshd_config
 RUN chmod 644 /etc/ssh/sshd_config
 
 RUN apt-get update -y
-RUN apt-get install exuberant-ctags lighttpd git gitweb -y
+RUN apt-get install exuberant-ctags apache2 git gitweb -y
 
 # https://help.ubuntu.com/community/KVM/Installation
 RUN apt-get install qemu-system-x86 libvirt-daemon-system libvirt-clients bridge-utils cpu-checker -y
@@ -54,7 +54,7 @@ RUN ssh-keygen -A
 
 RUN service libvirtd start
 RUN service virtlogd start
-RUN service lighttpd start
+RUN service apache2 start
 
 EXPOSE 80 tcp
 ENTRYPOINT ["/bin/bash"]
