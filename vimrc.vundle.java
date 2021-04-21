@@ -2,13 +2,19 @@
 " https://github.com/VundleVim/Vundle.vim
 " https://vimawesome.com/
 "
-set nocompatible              " be iMproved, required
+set nocompatible    " be iMproved, required
+filetype off        " required
 syntax enable
 
-let s:using_snippets = 1
+set ts=4            " tabstop
+set sw=4            " shiftwidth
+set sel=inclusive   " selection
+set slm=key         " selectmode 
+set splitright      " splitright of active window
+"set km=cmd         " keymodel (*NOT CORRECT*)
+set shell=/bin/bash "default shell
 
-" set the default shell "
-set shell=/bin/bash
+let s:using_snippets = 1
 
 " set the runtime path to include Vundle and initialize
 set rtp+=$HOME/.vim/bundle/Vundle.vim

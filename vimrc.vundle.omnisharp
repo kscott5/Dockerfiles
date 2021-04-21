@@ -4,13 +4,19 @@
 " https://vimawesome.com/
 " https://github.com/OmniSharp/omnisharp-vim/wiki/Example-config
 "
-set nocompatible              " be iMproved, required
+set nocompatible    " be iMproved, required
 syntax enable
+filetype off        " required
+
+set ts=4            " tabstop
+set sw=4            " shiftwidth
+set sel=inclusive   " selection
+set slm=key         " selectmode 
+set splitright      " splitright of active window
+"set km=cmd         " keymodel (*NOT CORRECT*)
+set shell=/bin/bash "default shell
 
 let s:using_snippets = 1
-
-" set the default shell "
-set shell=/bin/bash
 
 " set the runtime path to include Vundle and initialize
 set rtp+=$HOME/.vim/bundle/Vundle.vim
